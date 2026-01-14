@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.ostech.gtdcardsbackend.util.CardMaskingUtil;
 
 import java.time.LocalDateTime;
 
@@ -33,10 +34,6 @@ public class CardResponseDTO {
     private LocalDateTime updatedAt;
 
     public static String maskCardNumber(String cardNumber) {
-        //TODO: decrypt the card number here
-        if (cardNumber == null || cardNumber.length() < 4) {
-            return "****";
-        }
-        return "*".repeat(cardNumber.length() - 4) + cardNumber.substring(cardNumber.length() - 4);
+        return CardMaskingUtil.maskCardNumber(cardNumber);
     }
 }
