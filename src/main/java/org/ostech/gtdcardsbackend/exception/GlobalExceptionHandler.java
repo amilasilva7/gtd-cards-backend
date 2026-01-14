@@ -28,6 +28,19 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(CardNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleCardNotFound(
+        CardNotFoundException ex,
+        WebRequest request) {
+        ErrorResponseDTO error = ErrorResponseDTO.builder()
+            .status(HttpStatus.NOT_FOUND.value())
+            .error("CARD_NOT_FOUND")
+            .message(ex.getMessage())
+            .path(request.getDescription(false).replace("uri=", ""))
+            .build();
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(CardServiceException.class)
     public ResponseEntity<ErrorResponseDTO> handleCardServiceException(
         CardServiceException ex,

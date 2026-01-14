@@ -2,13 +2,16 @@ package org.ostech.gtdcardsbackend.service;
 
 import org.ostech.gtdcardsbackend.dto.CardRequestDTO;
 import org.ostech.gtdcardsbackend.dto.CardResponseDTO;
+import org.ostech.gtdcardsbackend.dto.CardUpdateDTO;
 import org.ostech.gtdcardsbackend.enums.CardStatus;
 import org.ostech.gtdcardsbackend.enums.CardType;
 import org.ostech.gtdcardsbackend.exception.CardAlreadyExistsException;
+import org.ostech.gtdcardsbackend.exception.CardNotFoundException;
 import org.ostech.gtdcardsbackend.exception.CardServiceException;
 import org.ostech.gtdcardsbackend.model.Card;
 import org.ostech.gtdcardsbackend.repository.CardRepository;
 import org.ostech.gtdcardsbackend.util.CardMaskingUtil;
+import org.ostech.gtdcardsbackend.util.MessageConstants;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +43,30 @@ public class CardService {
             throw new CardAlreadyExistsException("Card with number " + maskedCardNumber + " already exists");
         } catch (Exception e) {
             throw new CardServiceException("Error creating card: " + e.getMessage(), e);
+        }
+    }
+
+    @Transactional
+    public CardResponseDTO updateCard(Long cardId, CardUpdateDTO cardUpdateDTO) {
+        try {
+            Card card = cardRepository.findById(cardId)
+                .orElseThrow(() -> new CardNotFoundException(MessageConstants.CARD_NOT_FOUND));
+
+            if (cardUpdateDTO.getHolderName() != null && !cardUpdateDTO.getHolderName().isBlank()) {
+                card.setHolderName(cardUpdateDTO.getHolderName());
+            }
+
+            if (cardUpdateDTO.getStatus() != null && !cardUpdateDTO.getStatus().isBlank()) {
+                card.setStatus(CardStatus.valueOf(cardUpdateDTO.getStatus()));
+            }
+
+            Card updatedCard = cardRepository.save(card);
+            return mapCardToResponseDTO(updatedCard);
+
+        } catch (CardNotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new CardServiceException("Error updating card: " + e.getMessage(), e);
         }
     }
 

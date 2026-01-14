@@ -34,6 +34,12 @@ dependencies {
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     implementation "org.hibernate.validator:hibernate-validator:${hibernateValidatorVersion}"
+
+    //Testing
+    testImplementation "org.junit.jupiter:junit-jupiter:${jUnitVersion}"
+    testImplementation "org.mockito:mockito-core:${mockitoVersion}"
+    testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVersion}"
+    testImplementation "org.assertj:assertj-core:${assertJCore}"
 }
 
 tasks.named('test') {
