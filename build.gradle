@@ -32,6 +32,8 @@ dependencies {
 
     //Utilities
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    implementation "org.hibernate.validator:hibernate-validator:${hibernateValidatorVersion}"
 }
 
 tasks.named('test') {

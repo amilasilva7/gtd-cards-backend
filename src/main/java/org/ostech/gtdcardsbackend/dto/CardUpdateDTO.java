@@ -1,0 +1,30 @@
+package org.ostech.gtdcardsbackend.dto;
+
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class CardUpdateDTO {
+
+    @NotNull(message = "Card ID is required")
+    @Positive(message = "Card ID must be positive")
+    private Long id;
+
+    @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
+    @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "Name must contain only letters and spaces")
+    private String holderName;
+
+    @Pattern(regexp = "^(ACTIVE|BLOCKED|EXPIRED|SUSPENDED)$",
+        message = "Status must be ACTIVE, BLOCKED, EXPIRED, or SUSPENDED")
+    private String status;
+
+    @Pattern(regexp = "^(0[1-9]|1[0-2])/[0-9]{2}$", message = "Expiry date must be in MM/YY format")
+    private String expiryDate;
+}
