@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: gtd-cards-backend
+  profiles:
+    active: dev
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/changelog-master.xml
+    default-schema: dbo
+    liquibase-schema: dbo
+    drop-first: false
+    contexts: dev
+
+# External APIs Configuration
+app:
+  exchangerate:
+    api-key: ${EXCHANGERATE_API_KEY:76a9b46d524a5aeafa80d4cb}
+
+#Dev Profile
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    url: jdbc:sqlserver://${DB_HOST:localhost}:1433;databaseName=${DB_NAME:TESTDB};encrypt=true;trustServerCertificate=true
+    username: ${DB_USERNAME:gtd_card_user}
+    password: ${DB_PASSWORD:Password@123}
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+
+#Prod Profile
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    url: jdbc:sqlserver://${DB_HOST}:1433;databaseName=${DB_NAME};encrypt=true;trustServerCertificate=true
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    hikari:
+      minimum-idle: ${HIKARI_MIN_IDLE}
+      maximum-pool-size: ${HIKARI_MAX_POOL_SIZE}
+      auto-commit: ${HIKARI_AUTO_COMMIT_MODE}
+
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
