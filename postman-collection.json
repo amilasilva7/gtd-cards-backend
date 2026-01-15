@@ -1,0 +1,164 @@
+{
+  "info": {
+    "name": "GTD Cards Backend API",
+    "description": "Postman Collection for GTD Cards Backend REST API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Cards",
+      "item": [
+        {
+          "name": "Create Card",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cardNumber\": \"1234567890123456\",\n  \"holderName\": \"John Doe\",\n  \"cardType\": \"CREDIT\",\n  \"cvv\": \"123\",\n  \"expiryDate\": \"12/25\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/cards",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "cards"
+              ]
+            },
+            "description": "Create a new card. Returns 201 Created."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Card by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/cards/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "cards",
+                "1"
+              ]
+            },
+            "description": "Get card by ID. Returns 200 OK with card details. Note: Replace 1 with actual card ID."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Cards by Page",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/cards?page=0&size=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "cards"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Get cards by page. Returns 200 OK with paginated results."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Card",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"holderName\": \"John Updated\",\n  \"status\": \"BLOCKED\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/cards/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "cards",
+                "1"
+              ]
+            },
+            "description": "Update card details. Returns 200 OK. Note: Replace 1 with actual card ID."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Exchange Rates",
+      "item": [
+        {
+          "name": "Get Exchange Rates",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/exchange-rates?baseCurrency=USD",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "exchange-rates"
+              ],
+              "query": [
+                {
+                  "key": "baseCurrency",
+                  "value": "USD"
+                }
+              ]
+            },
+            "description": "Get exchange rates from third-party API. Returns 200 OK with exchange rates data. Default base currency is USD."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ]
+}
