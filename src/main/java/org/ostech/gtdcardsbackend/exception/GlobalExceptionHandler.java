@@ -90,6 +90,19 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(ExternalAPIUnavailableException.class)
+    public ResponseEntity<ErrorResponseDTO> handleExternalAPIUnavailable(
+        ExternalAPIUnavailableException ex,
+        WebRequest request) {
+        ErrorResponseDTO error = ErrorResponseDTO.builder()
+            .status(HttpStatus.SERVICE_UNAVAILABLE.value())
+            .error("EXTERNAL_API_UNAVAILABLE")
+            .message(ex.getMessage())
+            .path(request.getDescription(false).replace("uri=", ""))
+            .build();
+        return new ResponseEntity<>(error, HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDTO> handleGenericException(
         Exception ex,

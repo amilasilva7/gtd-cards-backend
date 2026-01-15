@@ -35,6 +35,10 @@ dependencies {
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     implementation "org.hibernate.validator:hibernate-validator:${hibernateValidatorVersion}"
 
+    //Resilience
+    implementation 'io.github.resilience4j:resilience4j-core:2.1.0'
+    implementation 'io.github.resilience4j:resilience4j-circuitbreaker:2.1.0'
+
     //Testing
     testImplementation "org.junit.jupiter:junit-jupiter:${jUnitVersion}"
     testImplementation "org.mockito:mockito-core:${mockitoVersion}"
