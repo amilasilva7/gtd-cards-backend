@@ -9,7 +9,9 @@ public class APIConstants {
     public static final String CARD_ENDPOINT = API_BASE + "/cards";
     public static final String CARD_GET_BY_ID_ENDPOINT = "/{id}";
     public static final String CARD_UPDATE_ENDPOINT = "/{id}";
-    public static final String CARD_EXCHANGE_RATES_ENDPOINT = "/{id}/exchange-rates";
+
+    // EXCHANGE RATES API Endpoints
+    public static final String EXCHANGE_RATES_ENDPOINT = API_BASE + "/exchange-rates";
 
     private APIConstants() {
     }

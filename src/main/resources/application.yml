@@ -12,6 +12,11 @@ spring:
     drop-first: false
     contexts: dev
 
+# External APIs Configuration
+app:
+  exchangerate:
+    api-key: ${EXCHANGERATE_API_KEY:76a9b46d524a5aeafa80d4cb}
+
 #Dev Profile
 ---
 spring:

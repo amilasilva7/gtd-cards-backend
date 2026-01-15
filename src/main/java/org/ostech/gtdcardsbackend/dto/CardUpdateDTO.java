@@ -20,7 +20,4 @@ public class CardUpdateDTO {
     @Pattern(regexp = "^(ACTIVE|BLOCKED|EXPIRED|SUSPENDED)$",
         message = "Status must be ACTIVE, BLOCKED, EXPIRED, or SUSPENDED")
     private String status;
-
-    @Pattern(regexp = "^(0[1-9]|1[0-2])/[0-9]{2}$", message = "Expiry date must be in MM/YY format")
-    private String expiryDate;
 }
