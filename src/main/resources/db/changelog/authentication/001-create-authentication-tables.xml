@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="t_users" author="Amila">
+        <comment>Create users table to store authentication and user profile information</comment>
+
+        <createTable tableName="users">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="VARCHAR(50)" defaultValue="USER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="DATETIME">
+                <constraints nullable="true"/>
+            </column>
+            <column name="last_login_at" type="DATETIME">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="users"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="s_users" author="Amila">
+        <comment>Create indexes on users table for query performance and lookups</comment>
+
+        <createIndex indexName="idx_users_email" tableName="users" unique="true">
+            <column name="email"/>
+        </createIndex>
+
+        <createIndex indexName="idx_users_active" tableName="users">
+            <column name="active"/>
+        </createIndex>
+
+        <createIndex indexName="idx_users_role" tableName="users">
+            <column name="role"/>
+        </createIndex>
+
+        <createIndex indexName="idx_users_created_at" tableName="users">
+            <column name="created_at" descending="true"/>
+        </createIndex>
+
+        <createIndex indexName="idx_users_last_login_at" tableName="users">
+            <column name="last_login_at" descending="true"/>
+        </createIndex>
+
+        <rollback>
+            <dropIndex indexName="idx_users_email" tableName="users"/>
+            <dropIndex indexName="idx_users_active" tableName="users"/>
+            <dropIndex indexName="idx_users_role" tableName="users"/>
+            <dropIndex indexName="idx_users_created_at" tableName="users"/>
+            <dropIndex indexName="idx_users_last_login_at" tableName="users"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="c_users" author="Amila">
+        <comment>Add business rule constraints to users table</comment>
+
+        <sql>
+            ALTER TABLE users
+                ADD CONSTRAINT chk_user_role
+                    CHECK (role IN ('USER', 'ADMIN', 'MODERATOR'))
+        </sql>
+
+        <sql>
+            ALTER TABLE users
+                ADD CONSTRAINT chk_user_email_format
+                    CHECK (email LIKE '%@%.%')
+        </sql>
+
+        <rollback>
+            <sql>ALTER TABLE users DROP CONSTRAINT chk_user_role</sql>
+            <sql>ALTER TABLE users DROP CONSTRAINT chk_user_email_format</sql>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

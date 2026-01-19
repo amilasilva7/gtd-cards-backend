@@ -6,6 +6,11 @@
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
 
+    <!-- AUTHENTICATION & SECURITY -->
+    <include file="classpath:db/changelog/authentication/001-create-authentication-tables.xml"/>
+    <include file="classpath:db/changelog/authentication/002-auth-data-dev.xml"/>
+    <include file="classpath:db/changelog/authentication/003-auth-data-prod.xml"/>
+
     <!-- MASTER DATA -->
     <include file="db/changelog/master/schema/001-create-master-tables.xml"/>
 
