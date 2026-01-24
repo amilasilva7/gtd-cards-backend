@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="auth_data_dev_users" author="Amila" context="dev">
+        <comment>Insert test users for development environment
+            Password hashes (BCrypt):
+            - test@example.com: password123 => $2a$10$C9u.W5wKOZN4mVj4L2OX2u82g5L5aX5ks9.yZtP1s9G3bK9V9h9bO
+            - admin@example.com: admin123 => $2a$10$5ZV7Ig8PfXvFe1q6K7L2hu82g5L5aX5ks9.yZtP1s9G3bK9V9h9bO
+        </comment>
+
+        <sql>SET IDENTITY_INSERT users ON</sql>
+
+        <insert tableName="users">
+            <column name="id" value="1"/>
+            <column name="name" value="Test User"/>
+            <column name="email" value="test@example.com"/>
+            <column name="password" value="$2a$10$C9u.W5wKOZN4mVj4L2OX2u82g5L5aX5ks9.yZtP1s9G3bK9V9h9bO"/>
+            <column name="role" value="USER"/>
+            <column name="active" valueBoolean="true"/>
+            <column name="created_at" valueComputed="GETDATE()"/>
+        </insert>
+
+        <insert tableName="users">
+            <column name="id" value="2"/>
+            <column name="name" value="Admin User"/>
+            <column name="email" value="admin@example.com"/>
+            <column name="password" value="$2a$10$5ZV7Ig8PfXvFe1q6K7L2hu82g5L5aX5ks9.yZtP1s9G3bK9V9h9bO"/>
+            <column name="role" value="ADMIN"/>
+            <column name="active" valueBoolean="true"/>
+            <column name="created_at" valueComputed="GETDATE()"/>
+        </insert>
+
+        <insert tableName="users">
+            <column name="id" value="3"/>
+            <column name="name" value="John Doe"/>
+            <column name="email" value="john.doe@example.com"/>
+            <column name="password" value="$2a$10$C9u.W5wKOZN4mVj4L2OX2u82g5L5aX5ks9.yZtP1s9G3bK9V9h9bO"/>
+            <column name="role" value="USER"/>
+            <column name="active" valueBoolean="true"/>
+            <column name="created_at" valueComputed="GETDATE()"/>
+        </insert>
+
+        <insert tableName="users">
+            <column name="id" value="4"/>
+            <column name="name" value="Jane Smith"/>
+            <column name="email" value="jane.smith@example.com"/>
+            <column name="password" value="$2a$10$C9u.W5wKOZN4mVj4L2OX2u82g5L5aX5ks9.yZtP1s9G3bK9V9h9bO"/>
+            <column name="role" value="MODERATOR"/>
+            <column name="active" valueBoolean="true"/>
+            <column name="created_at" valueComputed="GETDATE()"/>
+        </insert>
+
+        <sql>SET IDENTITY_INSERT users OFF</sql>
+
+        <rollback>
+            <delete tableName="users">
+                <where>email IN ('test@example.com', 'admin@example.com', 'john.doe@example.com', 'jane.smith@example.com')</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="auth_data_prod_info" author="Amila" context="prod">
+        <comment>Production environment - No test data inserted
+            All users should be created through the application's registration endpoint
+            or through an admin portal in a production environment.
+
+            IMPORTANT SECURITY NOTES:
+            1. Never hardcode user passwords in migration scripts for production
+            2. Always use secure password hashing (BCrypt with appropriate strength)
+            3. Consider implementing user creation through an initialization script or admin UI
+            4. Implement proper audit logging for user creation and modifications
+        </comment>
+
+        <!-- No data is inserted for production -->
+
+    </changeSet>
+
+</databaseChangeLog>

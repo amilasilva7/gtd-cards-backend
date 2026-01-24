@@ -1,10 +1,131 @@
 {
   "info": {
     "name": "GTD Cards Backend API",
-    "description": "Postman Collection for GTD Cards Backend REST API",
+    "description": "Postman Collection for GTD Cards Backend REST API with Authentication",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New User\",\n  \"email\": \"newuser@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "register"
+              ]
+            },
+            "description": "Register a new user. Returns 201 Created with JWT token and user details."
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Login with email and password. Returns 200 OK with JWT token and user details.\n\nTest Credentials:\n- Email: test@example.com\n- Password: password123\n\nAlso available:\n- admin@example.com / admin123\n- john.doe@example.com / password123\n- jane.smith@example.com / password123"
+          },
+          "response": []
+        },
+        {
+          "name": "Validate Token",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/validate",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "validate"
+              ]
+            },
+            "description": "Validate JWT token. Returns 200 OK with user details if token is valid.\n\nNote: Copy the token from login response and paste it as the jwt_token variable or manually replace {{jwt_token}}"
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/logout",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "logout"
+              ]
+            },
+            "description": "Logout user. Returns 200 OK. Token should be invalidated on client side."
+          },
+          "response": []
+        }
+      ]
+    },
     {
       "name": "Cards",
       "item": [
@@ -16,6 +137,11 @@
               {
                 "key": "Content-Type",
                 "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
                 "type": "text"
               }
             ],
@@ -34,28 +160,7 @@
                 "cards"
               ]
             },
-            "description": "Create a new card. Returns 201 Created."
-          },
-          "response": []
-        },
-        {
-          "name": "Get Card by ID",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/v1/cards/1",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "cards",
-                "1"
-              ]
-            },
-            "description": "Get card by ID. Returns 200 OK with card details. Note: Replace 1 with actual card ID."
+            "description": "Create a new card. Returns 201 Created.\n\nNote: Requires JWT token in Authorization header. Get token from login endpoint."
           },
           "response": []
         },
@@ -63,7 +168,13 @@
           "name": "Get Cards by Page",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              }
+            ],
             "url": {
               "raw": "{{base_url}}/api/v1/cards?page=0&size=10",
               "host": [
@@ -85,7 +196,34 @@
                 }
               ]
             },
-            "description": "Get cards by page. Returns 200 OK with paginated results."
+            "description": "Get cards with pagination. Returns 200 OK with paginated results.\n\nQuery Parameters:\n- page: Page number (0-indexed)\n- size: Number of records per page (default 10)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Card by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/cards/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "cards",
+                "1"
+              ]
+            },
+            "description": "Get card by ID. Returns 200 OK with card details.\n\nNote: Replace 1 with actual card ID."
           },
           "response": []
         },
@@ -97,6 +235,11 @@
               {
                 "key": "Content-Type",
                 "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
                 "type": "text"
               }
             ],
@@ -116,7 +259,34 @@
                 "1"
               ]
             },
-            "description": "Update card details. Returns 200 OK. Note: Replace 1 with actual card ID."
+            "description": "Update card details. Returns 200 OK.\n\nNote: Replace 1 with actual card ID."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Card",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/cards/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "cards",
+                "1"
+              ]
+            },
+            "description": "Delete a card. Returns 204 No Content or 200 OK depending on implementation.\n\nNote: Replace 1 with actual card ID."
           },
           "response": []
         }
@@ -129,7 +299,13 @@
           "name": "Get Exchange Rates",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              }
+            ],
             "url": {
               "raw": "{{base_url}}/api/v1/exchange-rates?baseCurrency=USD",
               "host": [
@@ -147,7 +323,7 @@
                 }
               ]
             },
-            "description": "Get exchange rates from third-party API. Returns 200 OK with exchange rates data. Default base currency is USD."
+            "description": "Get exchange rates from third-party API. Returns 200 OK with exchange rates data.\n\nQuery Parameters:\n- baseCurrency: Base currency code (default USD). Example values: USD, EUR, GBP, JPY, CAD, etc."
           },
           "response": []
         }
@@ -158,6 +334,11 @@
     {
       "key": "base_url",
       "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
       "type": "string"
     }
   ]
